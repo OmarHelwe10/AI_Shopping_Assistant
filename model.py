@@ -8,13 +8,13 @@ from llama_index import StorageContext, load_index_from_storage
 
 app = Flask(__name__)
 
-os.environ['OPENAI_API_KEY'] = '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'
-storage_context = StorageContext.from_defaults(persist_dir="Capstone_Project_Team_3")
+os.environ['OPENAI_API_KEY'] = 'API_KEY'
+storage_context = StorageContext.from_defaults(persist_dir="Directory_containing_index")
 index = load_index_from_storage(storage_context)
 
 query_engine = index.as_query_engine()
 # Load the CSV file
-df = pd.read_csv('df.csv')
+df = pd.read_csv('your_dataset.csv')
 
 # Preprocess the data
 df['subcategory'] = df['L2 - sub-category']
@@ -55,7 +55,7 @@ def recommendations():
         # Find the index of the most similar title
         most_similar_index = cosine_sim.argmax()
         most_similar_product = filtered_df.iloc[most_similar_index]
-
+        #if product not added , add it to the list otherwise drop
         if (most_similar_product['title'] not in added_titles and cosine_sim[most_similar_index][0] > 0.2):
             recommendations_data.append({
                 "query_title": query_title,
